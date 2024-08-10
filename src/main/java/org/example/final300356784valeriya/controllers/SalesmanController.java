@@ -21,20 +21,28 @@ public class SalesmanController {
     @Autowired
     private SalesmanRepository salesmanRepository;
 
+
+     //Show a summary of all sales.
+
     @GetMapping("/sales")
     public String getSalesSummary(Model model) {
+        // Retrieve all salesmen from the repository
         List<Salesman> salesmen = salesmanRepository.findAll();
 
+        // Summarize sales by salesman and item
         Map<String, Map<String, Double>> salesSummary = salesmen.stream()
                 .collect(Collectors.groupingBy(Salesman::getName,
                         Collectors.groupingBy(Salesman::getItem,
                                 Collectors.summingDouble(Salesman::getAmount))));
 
+        // Add data to the model
         model.addAttribute("salesmen", salesmen);
         model.addAttribute("salesSummary", salesSummary);
         model.addAttribute("newSalesman", new Salesman());
         return "sales";
     }
+
+    // Save a new salesman to the repository.
 
     @PostMapping("/save-salesman")
     public String saveSalesman(@ModelAttribute("newSalesman") Salesman salesman) {
@@ -42,11 +50,15 @@ public class SalesmanController {
         return "redirect:/sales";
     }
 
+    // Delete a salesman by ID.
+
     @GetMapping("/delete-salesman/{id}")
     public String deleteSalesman(@PathVariable Long id) {
         salesmanRepository.deleteById(id);
         return "redirect:/sales";
     }
+
+    //Show the edit page for a salesman.
 
     @GetMapping("/edit-salesman/{id}")
     public String editSalesman(@PathVariable Long id, Model model) {
@@ -54,6 +66,8 @@ public class SalesmanController {
         model.addAttribute("salesman", salesman);
         return "edit";
     }
+
+    // Update an existing salesman.
 
     @PostMapping("/update-salesman")
     public String updateSalesman(@ModelAttribute("salesman") Salesman salesman) {
