@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * For the full project code and documentation, please visit:
+ * [GitHub Repository](https://github.com/lerasaltykova/final300356784valeriya)
+ */
 @Controller
 public class SalesmanController {
 
