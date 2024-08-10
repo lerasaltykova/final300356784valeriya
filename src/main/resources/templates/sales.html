@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Final Exam Set B</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        function confirmDelete(event) {
+            if (!confirm("Are you sure you want to delete the record?")) {
+                event.preventDefault();
+            }
+        }
+
+        function validateForm(event) {
+            var name = document.getElementById('name').value;
+            var item = document.getElementById('item').value;
+            var amount = document.getElementById('amount').value;
+            var date = document.getElementById('dot').value;
+
+            if (name === "" || item === "" || amount === "" || date === "") {
+                alert("Data cannot be blank.");
+                event.preventDefault();
+                return;
+            }
+
+            if (amount <= 0) {
+                alert("Sales cannot be 0.");
+                event.preventDefault();
+                return;
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="text-center">Final Exam Set B</h2>
+    <h4 class="text-center mt-3">Sales Summary Table</h4>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>Salesman Name</th>
+            <th>Washing Machine</th>
+            <th>Refrigerator</th>
+            <th>Music System</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${salesSummary}">
+            <td th:text="${entry.key}"></td>
+            <td th:text="${entry.value['Washing Machine'] ?: 0.0}"></td>
+            <td th:text="${entry.value['Refrigerator'] ?: 0.0}"></td>
+            <td th:text="${entry.value['Music System'] ?: 0.0}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div style="background-color: #4696dd; padding: 1rem; margin-top: 1rem;">
+        <form th:action="@{/save-salesman}" th:object="${newSalesman}" method="post" class="w-75 mx-auto" onsubmit="validateForm(event)">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="name" class="text-white">Salesman Name:</label>
+                    <input type="text" id="name" class="form-control" placeholder="Salesman Name" th:field="*{name}">
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="item" class="text-white">Item Type:</label>
+                    <select id="item" class="form-control" th:field="*{item}">
+                        <option value="" disabled selected>Select an item</option>
+                        <option value="Washing Machine">Washing Machine</option>
+                        <option value="Refrigerator">Refrigerator</option>
+                        <option value="Music System">Music System</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="amount" class="text-white">Sales Amount:</label>
+                    <input type="number" id="amount" class="form-control" placeholder="Sales Amount" th:field="*{amount}" required>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="dot" class="text-white">Transaction Date:</label>
+                    <input type="date" id="dot" class="form-control" th:field="*{dot}" required>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+
+
+    <table class="table table-bordered mt-4">
+        <thead>
+        <tr>
+            <th>Transaction Code</th>
+            <th>Salesman</th>
+            <th>Item</th>
+            <th>Amount</th>
+            <th>Transaction Date</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="salesman : ${salesmen}">
+            <td th:text="${salesman.id}"></td>
+            <td th:text="${salesman.name}"></td>
+            <td th:text="${salesman.item}"></td>
+            <td th:text="${salesman.amount}"></td>
+            <td th:text="${#dates.format(salesman.dot, 'yyyy-MM-dd')}"></td>
+            <td>
+
+                <a th:href="@{/delete-salesman/{id}(id=${salesman.id})}" class="btn btn-danger" onclick="confirmDelete(event)">Delete</a>
+                <a th:href="@{/edit-salesman/{id}(id=${salesman.id})}" class="btn btn-success">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

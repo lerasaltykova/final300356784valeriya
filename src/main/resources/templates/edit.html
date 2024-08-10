@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Salesman</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <form th:action="@{/update-salesman}" th:object="${salesman}" method="post">
+        <!-- Hidden ID Field -->
+        <input type="hidden" th:field="*{id}"/>
+
+        <!-- Transaction Number (Read-Only) -->
+        <div class="form-group">
+            <label for="transactionCode">Transaction Code:</label>
+            <input type="text" id="transactionCode" class="form-control" th:field="*{id}" readonly />
+        </div>
+
+        <!-- Salesman Name -->
+        <div class="form-group">
+            <label for="name">Salesman Name:</label>
+            <input type="text" id="name" class="form-control" placeholder="Salesman Name" th:field="*{name}" />
+        </div>
+
+        <!-- Item Type -->
+        <div class="form-group">
+            <label for="item">Item Type:</label>
+            <select id="item" class="form-control" th:field="*{item}">
+                <option value="Washing Machine" th:selected="${salesman.item == 'Washing Machine'}">Washing Machine</option>
+                <option value="Refrigerator" th:selected="${salesman.item == 'Refrigerator'}">Refrigerator</option>
+                <option value="Music System" th:selected="${salesman.item == 'Music System'}">Music System</option>
+            </select>
+        </div>
+
+        <!-- Sales Amount -->
+        <div class="form-group">
+            <label for="amount">Sales Amount:</label>
+            <input type="number" id="amount" class="form-control" placeholder="Sales Amount" th:field="*{amount}" />
+        </div>
+
+        <!-- Transaction Date -->
+        <div class="form-group">
+            <label for="dot">Transaction Date:</label>
+            <input type="date" id="dot" class="form-control" th:field="*{dot}" />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
